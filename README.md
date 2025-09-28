@@ -1,1 +1,3 @@
-# Project 
+# Abstract
+
+Bionic reading is a bio-hack that allows your brain to increase reading speed and comprehension by embolding key portions of words and sentences. The goal of this project is to connect a camera device to an AI pipeline to automatically relay bionic text to the user through an existing smart glasses device or novel device. Use case specifically applicable to academia to increase ability to keep up with relevant literature and publishings. 
