@@ -1,4 +1,6 @@
 
+from typing import Union, List, Dict
+
 """
 Handles OCR processing for static images and live video frames.
 Uses pytesseract and OpenCV/Pillow for text extraction.
