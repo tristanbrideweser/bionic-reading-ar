@@ -9,11 +9,13 @@ format:
     incremental: true
 ---
 
+Accelerated Reading via Bionic AR Glasses
+
 ## Part 1: Project Context
 
 ### Problem Statement & Goal
 **Problem Statement:**  
-- [Insert 2–3 sentences describing the problem your project is addressing.]  
+- Bionic  
 
 **Goal / Hypothesis:**  
 - [Insert 1 sentence describing the main objective of your project.]  

@@ -1,4 +1,4 @@
-from src.ocr.ocr_engine import load_image, preprocess_image, extract_text
+from src.ocr.ocr_image_pipeline import load_image, preprocess_image, extract_text
 from src.utils.utils import read_file, ocr_accuracy, save_two_column_md as save_to_md, display_md_file as display
 from src.bionic.bionic import bionify_text
 import cv2
