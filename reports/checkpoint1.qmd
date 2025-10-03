@@ -1,6 +1,5 @@
 ---
 title: "ECE 57000 Project Presentation"
-author: "Tristan"
 format: 
   revealjs:
     theme: white
@@ -9,38 +8,116 @@ format:
     incremental: true
 ---
 
-Accelerated Reading via Bionic AR Glasses
+## Accelerated Reading via Bionic AR Glasses
 
-## Part 1: Project Context
+::: {.columns}
 
-### Problem Statement & Goal
+::: {.column width="50%"}
 **Problem Statement:**  
-- Bionic reading is a technique that boldens certain parts of text to adjust focus to increase reading speed. 
-- However, while usable for many digital outlets, it is not widely available in print media, and if it is, new media must be purchased.
+Bionic reading is a technique that boldens certain parts of text to adjust focus to increase reading speed. However, while usable for many digital outlets, it is not widely available in print media, and if it is, new media must be purchased.
+:::
 
+::: {.column width="50%"}
 **Goal / Hypothesis:**  
-- This project seeks to design a device that leverages smart glasses to detect and "bionify" text and overlay onto existing print media utilizing augmented reality (AR).
+This project seeks to design a device that leverages smart glasses to detect and "bionify" text and overlay onto existing print media utilizing augmented reality (AR).
+:::
 
+:::
 ---
 
 ### Methodology Overview
-**Approach:**  
-The following project structure will be implemented:
-- OCR
-- Bionification
-- Output
-
-**Key Components:**  
-- Bullet 1: [e.g., OCR pipeline for scanned books]  
-- Bullet 2: [e.g., Text preprocessing with OpenCV + Tesseract]  
-- Bullet 3: [e.g., Prototype Bionic Reading interface]  
+- **Computer Vision**: Optical Character Recognition (OCR) pipeline for processig and detecting text from live video feed.
+- **Bionification Algorithm**: Returns list of strings with substrings that will be boldened defined by an adjustable ratio.
+- **Mapping & Projection Algorithm**: Once text is processed and bionified, it is mapped and projected onto the original text automatically.
+- **Interface**: User is able to change the bionification rate through a slider and the smart glass screen relays the bionified text.
 
 ---
 
-## Part 2: Initial Code Implementation
-
-### Code Snippet 1
+### OCR Image Pipeline
 ```{.python}
-
+def preprocess_image(img: Union[Image.Image, np.ndarray], max_width: int = 1200) -> np.ndarray:
+       if isinstance(img, Image.Image):
+        img = np.array(img)
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    gray = cv2.GaussianBlur(gray, (3, 3), 0)
+    _, preprocessed = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    h, w = preprocessed.shape
+    if w > max_width:
+        scale = max_width / w
+        preprocessed = cv2.resize(preprocessed, (int(w*scale), int(h*scale)), interpolation=cv2.INTER_LINEAR)
+    coords = np.column_stack(np.where(preprocessed > 0))
+    angle = cv2.minAreaRect(coords)[-1]
+    if angle < -45:
+        angle = -(90 + angle)
+    else:
+        angle = -angle
+    M = cv2.getRotationMatrix2D((preprocessed.shape[1]//2, preprocessed.shape[0]//2), angle, 1.0)
+    preprocessed = cv2.warpAffine(preprocessed, M, (preprocessed.shape[1], preprocessed.shape[0]),
+                                  flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    return preprocessed
 ```
-# Paste up to 20 lines of your first code snippet here
+---
+
+### Explanation
+The initial input is an image containing text, which can be highly sensitive to noise from angle, lighting, etc. The following adjustments were made for preprocessing:
+
+- Grayscale conversion
+- Gaussian blur denoising
+- Otsu's thresholding
+- Resize to reasonable width
+- Deskew to straighten text
+
+---
+
+### Bionification
+```{.python}
+def bionify_text(text: str, ratio: float = 0.5) -> str:
+    def bionic_word(word: str) -> str:
+        if not word:
+            return word
+        bold_len = max(1, round(len(word) * ratio))
+        return f"**{word[:bold_len]}**{word[bold_len:]}"
+    words = text.split()
+    bionic_words = [bionic_word(word) for word in words]
+    return ' '.join(bionic_words)
+```
+
+---
+
+### Explanation
+This algorithm takes the processed textual data and determines which portion of the text requires boldening with a ratio threshold with a default of 50%, and returns the bionified text. 
+
+---
+
+## Preliminary Results & Analysis
+Accuracy: 90.5%
+<table>
+<tr>
+<th>Original Text</th>
+<th>Bionic Reading</th>
+</tr>
+<tr><td>PART I</td><td>**+** **7** **gog**agT **®**e **n**e</td></tr>
+<tr><td>"THE TRIBUTES"</td><td></td></tr>
+<tr><td></td><td>**PA**RT **I**</td></tr>
+<tr><td>Chapter 1.</td><td>**"T**HE **TRIB**UTES"</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td>When I wake up, the other side of the bed is cold. My</td><td>**Chap**ter **1**.</td></tr>
+<tr><td>fingers stretch out, seeking Prim's warmth but finding</td><td></td></tr>
+<tr><td>only the rough canvas cover of the mattress. She must</td><td>**Wh**en **|** **wa**ke **up**, **th**e **ot**her **si**de **o**f **th**e **be**d **i**s **co**ld. **M**y</td></tr>
+
+</table>
+
+---
+
+## Conclusion
+
+### Results Analysis
+
+- The current model achieves ~90% accuracy in detecting the correct text and applying the bionification algorithm.  
+- There are clear errors with the OCR, such as icons on the tablet being interpreted as text and misspellings.
+
+### Next Steps
+
+- Increase the sample size to include images with varying noise (lighting, angles, etc.) and achieve >95% detection accuracy  
+- Map and project bionified text to the original text within an image  
+- Apply bionification to a sample video for dynamic noise assessment

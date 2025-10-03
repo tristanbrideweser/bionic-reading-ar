@@ -39,26 +39,26 @@ def preprocess_image(img: Union[Image.Image, np.ndarray], max_width: int = 1200)
     - Resize to reasonable width
     - Deskew to straighten text
     """
-    # Convert PIL to NumPy array if needed
+    # convert PIL to numpy array if needed
     if isinstance(img, Image.Image):
         img = np.array(img)
 
-    # Grayscale
+    # grayscale conversion
     gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-    # Gaussian blur to reduce noise
+    # guassian blur to reduce noise
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
 
-    # Otsu thresholding
+    # otsu thresholding
     _, preprocessed = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    # Resize if width is too large
+    # resize if width is too large
     h, w = preprocessed.shape
     if w > max_width:
         scale = max_width / w
         preprocessed = cv2.resize(preprocessed, (int(w*scale), int(h*scale)), interpolation=cv2.INTER_LINEAR)
 
-    # Deskew
+    # deskew
     coords = np.column_stack(np.where(preprocessed > 0))
     angle = cv2.minAreaRect(coords)[-1]
     if angle < -45:
