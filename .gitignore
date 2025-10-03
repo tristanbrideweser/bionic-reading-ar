@@ -1,1 +1,4 @@
 bionic-reader-ar/
+src/tests/
+tests/
+__pycache__/
