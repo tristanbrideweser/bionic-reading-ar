@@ -15,16 +15,20 @@ Accelerated Reading via Bionic AR Glasses
 
 ### Problem Statement & Goal
 **Problem Statement:**  
-- Bionic  
+- Bionic reading is a technique that boldens certain parts of text to adjust focus to increase reading speed. 
+- However, while usable for many digital outlets, it is not widely available in print media, and if it is, new media must be purchased.
 
 **Goal / Hypothesis:**  
-- [Insert 1 sentence describing the main objective of your project.]  
+- This project seeks to design a device that leverages smart glasses to detect and "bionify" text and overlay onto existing print media utilizing augmented reality (AR).
 
 ---
 
 ### Methodology Overview
 **Approach:**  
-- [Brief description of your technical approach — model, algorithm, or system design.]  
+The following project structure will be implemented:
+- OCR
+- Bionification
+- Output
 
 **Key Components:**  
 - Bullet 1: [e.g., OCR pipeline for scanned books]  
@@ -37,4 +41,6 @@ Accelerated Reading via Bionic AR Glasses
 
 ### Code Snippet 1
 ```{.python}
+
+```
 # Paste up to 20 lines of your first code snippet here
