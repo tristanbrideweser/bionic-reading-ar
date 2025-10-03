@@ -1,0 +1,38 @@
+---
+title: "ECE 57000 Project Presentation"
+author: "Tristan"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    transition: fade
+    incremental: true
+---
+
+## Part 1: Project Context
+
+### Problem Statement & Goal
+**Problem Statement:**  
+- [Insert 2–3 sentences describing the problem your project is addressing.]  
+
+**Goal / Hypothesis:**  
+- [Insert 1 sentence describing the main objective of your project.]  
+
+---
+
+### Methodology Overview
+**Approach:**  
+- [Brief description of your technical approach — model, algorithm, or system design.]  
+
+**Key Components:**  
+- Bullet 1: [e.g., OCR pipeline for scanned books]  
+- Bullet 2: [e.g., Text preprocessing with OpenCV + Tesseract]  
+- Bullet 3: [e.g., Prototype Bionic Reading interface]  
+
+---
+
+## Part 2: Initial Code Implementation
+
+### Code Snippet 1
+```{.python}
+# Paste up to 20 lines of your first code snippet here
